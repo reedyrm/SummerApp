@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Server.Data;
+using Server.Services;
 
 namespace Server
 {
@@ -26,6 +27,7 @@ namespace Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddGrpc();
             services.AddSingleton<WeatherForecastService>();
         }
 
@@ -49,8 +51,11 @@ namespace Server
 
             app.UseRouting();
 
+            app.UseGrpcWeb();
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGrpcService<BeachConditionsService>().EnableGrpcWeb();
                 endpoints.MapFallbackToFile("index.html");
             });
         }

@@ -1,0 +1,54 @@
+﻿@page "/beachconditions"
+@inject GrpcChannel Channel
+@using Google.Protobuf.WellKnownTypes
+
+
+<h1>Beach Conditions</h1>
+
+<p>Conditions at different points on the coast line.</p>
+
+
+@if (beachConditions == null)
+{
+    <p><em>Loading Beach Conditions...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>BeachId</th>
+                <th>Name</th>
+                <th>Condition</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var beachCondition in beachConditions)
+            {
+                <tr>
+                    <td>@beachCondition.BeachId</td>
+                    <td>@beachCondition.Name</td>
+                    <td>@beachCondition.Condition</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+@code {
+
+    private IList<Protos.BeachCondition> beachConditions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var client = new Protos.BeachConditions.BeachConditionsClient(Channel);
+
+        var getAllBeachConditionsRequest = new Protos.GetAllBeachConditionRequest();
+
+        Protos.GetAllBeachConditionResponse response = await client.getAllBeachConditionsAsync(getAllBeachConditionsRequest);
+
+        beachConditions = response.BeachConditions;
+    }
+}

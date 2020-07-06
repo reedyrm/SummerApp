@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option csharp_namespace = "SummerServer";
+
+package beachConditions;
+
+// The beach conditions services
+service BeachConditions {
+  rpc getAllBeachConditions (GetAllBeachConditionRequest) returns (GetAllBeachConditionResponse);
+  rpc createBeachCondition (CreateBeachConditionRequest) returns (CreateBeachConditionResponse);
+}
+
+message GetAllBeachConditionRequest {
+}
+
+message GetAllBeachConditionResponse {
+  repeated BeachCondition beachConditions = 1;
+}
+
+message CreateBeachConditionRequest {
+    string name = 1;
+    string condition = 2;
+}
+
+message CreateBeachConditionResponse {
+    BeachCondition createdBeachCondition = 1;
+}
+
+message BeachCondition {
+    int64 beachId = 1;
+    string name = 2;
+    string condition = 3;
+}
